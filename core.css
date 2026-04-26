@@ -1,0 +1,171 @@
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================
+   COLOR SYSTEM
+========================= */
+:root {
+--bg-base: #D48ECD;  /* deep warm brown-black */
+--bg-deep: #e85d2a;   /* slightly lifted, still warm */
+
+--accent-1: #ff8c42;  /* main orange (sunset core) */
+--accent-2: #ff8c42;  /* burnt orange / terracotta */
+--accent-3: #ffd2a1;  /* soft golden highlight */
+
+--text-main: #fff1e6; /* warm off-white */
+--text-soft: #e6b8a2; /* muted peach */
+}
+
+/* =========================
+   BODY + BACKGROUND
+========================= */
+body { 
+	font-family: 'Dancing Script', cursive;
+	color: var(--text-main); 
+	overflow-x: hidden;
+
+	background: 
+	/*linear-gradient( 135deg, rgba(30, 220, 220, 1) 0%, rgba(30, 220, 220, 0.62) 25%, rgba(30, 220, 220, 0) 100% ),*/ 
+	radial-gradient(circle at 20% 30%, var(--accent-1), transparent 40%), 
+	radial-gradient(circle at 80% 70%, var(--accent-2), transparent 45%), 
+	radial-gradient(circle at 50% 90%, var(--accent-3), transparent 35%), 
+	var(--bg-base); background-size: 200% 200%; animation: sunsetShift 18s ease-in-out infinite;
+background-attachment: fixed;
+}
+
+/* lock scroll initially */
+body.locked {
+  overflow: hidden;
+}
+
+/* animated gradient drift */
+@keyframes sunsetShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================
+   GRAIN OVERLAY
+========================= */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background: url("https://www.transparenttextures.com/patterns/3px-tile.png");
+  opacity: 0.1;
+
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* =========================
+   STAGE (MAIN CONTAINER)
+========================= */
+.stage {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================
+   PARALLAX GLOW LAYER
+========================= */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+
+  background: radial-gradient(circle, rgba(255,120,90,0.15), transparent 60%);
+  filter: blur(80px);
+
+  animation: drift 25s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  0%   { transform: translate(-10%, -10%); }
+  100% { transform: translate(10%, 10%); }
+}
+
+/* =========================
+   PANELS (STACKED)
+========================= */
+.panel {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(40px);
+
+transition:
+  opacity 2s ease,
+  transform 2s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* active panel */
+.panel.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   HEADINGS
+========================= */
+.panel h1 {
+font-family: 'Nunito', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+
+  color: var(--text-main);
+
+  text-shadow: 
+    0 0 30px rgba(255, 90, 70, 0.25),
+    0 0 60px rgba(255, 60, 100, 0.15);
+}
+
+/* =========================
+   PARAGRAPH PHASE
+========================= */
+.paragraph {
+  align-items: flex-start;
+  padding: 120px 20px;
+}
+
+/* readable text block */
+.paragraph p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--text-main);
+  text-align: left;
+
+  background: rgba(100, 100, 100, 0.2);
+  border: 1px solid rgba(255, 120, 90, 0.15);
+
+  padding: 30px;
+  border-radius: 14px;
+background-attachment: fixed;
+  backdrop-filter: blur(10px);  
+
+  max-width: 700px;       /* forces readable width */
+  width: 100%;
+
+  white-space: normal;    /* ensures wrapping */
+  word-break: break-word; /* prevents overflow */
+
+  overflow-y: hidden;       /* vertical scroll */
+  overflow-x: hidden;     /* prevent sideways scroll */
+}
